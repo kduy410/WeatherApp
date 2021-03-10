@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--    To display HomeFragBinding auto generate class, implement <data>-->
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="androidx.core.content.ContextCompat" />
+
+        <variable
+            name="viewModel"
+            type="com.example.weatherapp.ui.home.HomeViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:onRefreshListener="@{viewModel::refresh}"
+            app:refreshing="@{viewModel.dataLoading}">
+
+
+            <RelativeLayout
+                android:id="@+id/container_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                    <LinearLayout
+                        android:id="@+id/data_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical"
+
+                        android:visibility="@{viewModel.empty ? View.GONE : View.VISIBLE}">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardViewName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginVertical="@dimen/activity_vertical_margin"
+                            android:clickable="true"
+                            android:elevation="@dimen/elevation"
+                            android:focusable="true"
+                            app:cardCornerRadius="@dimen/cornerRadius">
+
+                            <LinearLayout
+                                android:id="@+id/container_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="@dimen/activity_horizontal_margin">
+
+                                <LinearLayout
+                                    android:id="@+id/header_container_name"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvName"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{viewModel.weather.name.toString()}"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textAppearance="?android:attr/textAppearanceLarge" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/body_container_name"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="@dimen/activity_horizontal_margin"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:id="@+id/tvDT"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{viewModel.isCurrentUTC() ? viewModel.convertEpochToDate(viewModel.weather.dt) : viewModel.convertEpochToDate(viewModel.weather.dt,viewModel.weather.timezone)}"
+                                        android:textAlignment="textStart"
+                                        android:textAllCaps="true"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="@color/colorAccent" />
+
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardViewCoord"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginVertical="@dimen/activity_half_vertical_margin"
+                            android:clickable="true"
+                            android:elevation="@dimen/elevation"
+                            android:focusable="true"
+                            app:cardCornerRadius="@dimen/cornerRadius">
+
+                            <LinearLayout
+                                android:id="@+id/container_coord"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="@dimen/activity_horizontal_margin">
+
+                                <LinearLayout
+                                    android:id="@+id/header_container_coord"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/header_coord"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:text="@string/coordinate"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+                                </LinearLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/body_container_coord"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="@dimen/activity_large_horizontal_margin"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:id="@+id/tvCoordLat"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_alignParentTop="true"
+                                        android:text="@{`Lat: ` + viewModel.weather.coord.lat.toString()}"
+                                        android:textAlignment="textStart"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="@color/colorAccent" />
+
+                                    <TextView
+                                        android:id="@+id/tvCoordLon"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentTop="true"
+                                        android:layout_alignParentEnd="true"
+                                        android:gravity="end"
+                                        android:text="@{`Lon: ` + viewModel.weather.coord.lon.toString()}"
+                                        android:textAlignment="textEnd"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="@color/colorAccent" />
+                                </RelativeLayout>
+
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardViewBase"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginVertical="@dimen/activity_half_vertical_margin"
+                            android:elevation="@dimen/elevation"
+                            app:cardCornerRadius="@dimen/cornerRadius">
+
+                            <LinearLayout
+                                android:id="@+id/container_base"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical"
+                                android:padding="@dimen/activity_horizontal_margin">
+
+                                <LinearLayout
+                                    android:id="@+id/header_container_base"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="3">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/base"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="@color/black" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/visibility"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="@color/black" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@string/clouds"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="@color/black" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/body_container_base"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:visibility="gone"
+                                    android:weightSum="3">
+
+                                    <TextView
+                                        android:id="@+id/tvBase"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@{viewModel.weather.base.toString()}"
+                                        android:textAlignment="center"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="@color/colorAccent" />
+
+                                    <TextView
+                                        android:id="@+id/tvVisibility"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@{viewModel.weather.visibility.toString()}"
+                                        android:textAlignment="center"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="@color/colorAccent" />
+
+                                    <TextView
+                                        android:id="@+id/tvClouds"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="@{viewModel.weather.clouds.all.toString()}"
+                                        android:textAlignment="center"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="@color/colorAccent" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardViewWeather"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginVertical="@dimen/activity_half_vertical_margin"
+                            android:clickable="true"
+                            android:elevation="@dimen/elevation"
+                            android:focusable="true"
+                            app:cardCornerRadius="@dimen/cornerRadius">
+
+                            <LinearLayout
+                                android:id="@+id/container_weather"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:padding="@dimen/activity_horizontal_margin">
+
+                                <LinearLayout
+                                    android:id="@+id/header_container_weather"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvWeather"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/weather_today"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textAppearance="?android:attr/textAppearanceLarge" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/body_container_weather"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:padding="@dimen/activity_horizontal_margin"
+                                    android:visibility="visible">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent">
+
+                                        <ImageView
+                                            android:id="@+id/ivWeatherIcon"
+                                            android:layout_width="60dp"
+                                            android:layout_height="60dp" />
+
+                                        <TextView
+                                            android:id="@+id/tvWeatherMain"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="@dimen/activity_horizontal_margin"
+                                            android:layout_marginBottom="@dimen/activity_half_vertical_margin"
+                                            android:layout_toEndOf="@+id/ivWeatherIcon"
+                                            android:text="@{!viewModel.weather.weather.empty ? viewModel.weather.weather.get(viewModel.weather.weather.size()-1).main : ``}"
+                                            android:textAppearance="?android:attr/textAppearanceMedium"
+                                            android:textColor="@color/colorAccent" />
+
+                                        <TextView
+                                            android:id="@+id/tvWeatherMainDescription"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/tvWeatherMain"
+                                            android:layout_alignStart="@id/tvWeatherMain"
+                                            android:text="@{!viewModel.weather.weather.empty ? viewModel.weather.weather.get(viewModel.weather.weather.size()-1).description : ``}"
+                                            android:textAppearance="?android:attr/textAppearanceMedium"
+                                            android:textColor="@color/colorAccent" />
+
+                                        <TableLayout
+                                            android:id="@+id/body_container_weather_temp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@+id/ivWeatherIcon"
+                                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                                            android:stretchColumns="*">
+
+                                            <TableRow>
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:gravity="center"
+                                                    android:text="@string/temp"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:gravity="center"
+                                                    android:text="@string/feels_like"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:gravity="center"
+                                                    android:text="@string/temp_min"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:gravity="center"
+                                                    android:text="@string/temp_max"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                            </TableRow>
+
+                                            <TableRow>
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@{viewModel.weather.main.temp.toString()+`\u2103`}"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                                    android:textColor="@color/colorAccent" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@{viewModel.weather.main.feelsLike.toString()+`\u2103`}"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                                    android:textColor="@color/colorAccent" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@{viewModel.weather.main.temp_min.toString()+`\u2103`}"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                                    android:textColor="@color/colorAccent" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@{viewModel.weather.main.temp_max.toString()+`\u2103`}"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                                    android:textColor="@color/colorAccent" />
+                                            </TableRow>
+                                        </TableLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/body_container_weather_pressure"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/body_container_weather_temp"
+                                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                                            android:orientation="vertical">
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal"
+                                                android:weightSum="2">
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="@string/pressure"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="@string/humidity"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal"
+                                                android:weightSum="2">
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="@{viewModel.weather.main.pressure.toString()}"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                                    android:textColor="@color/colorAccent" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="@{viewModel.weather.main.humidity.toString()}"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                                    android:textColor="@color/colorAccent" />
+
+                                            </LinearLayout>
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/body_container_weather_wind"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/body_container_weather_pressure"
+                                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                                            android:orientation="vertical">
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
+
+                                                <TextView
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/winds"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/activity_half_horizontal_margin"
+                                                android:orientation="horizontal"
+                                                android:weightSum="2">
+
+                                                <TextView
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="@string/speed"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                                <TextView
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="@string/deg"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal"
+                                                android:weightSum="2">
+
+                                                <TextView
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="@{viewModel.weather.wind.speed.toString() + ` m/s`}"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                                    android:textColor="@color/colorAccent" />
+
+                                                <TextView
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="@{viewModel.weather.wind.deg.toString()+`\u00B0`}"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                                    android:textColor="@color/colorAccent" />
+
+                                            </LinearLayout>
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/body_container_weather_sys"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_below="@id/body_container_weather_wind"
+                                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                                            android:clickable="true"
+                                            android:focusable="true"
+                                            android:orientation="vertical">
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
+
+                                                <TextView
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sys"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/activity_half_vertical_margin"
+                                                android:orientation="horizontal"
+                                                android:weightSum="3">
+
+                                                <TextView
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="@string/country"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                                <TextView
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="@string/sunrise"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                                <TextView
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:text="@string/sunset"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:orientation="horizontal"
+                                                android:weightSum="3">
+
+                                                <TextView
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="match_parent"
+                                                    android:layout_weight="1"
+                                                    android:text="@{viewModel.weather.sys.country}"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                                    android:textColor="@color/colorAccent" />
+
+                                                <TextView
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="match_parent"
+                                                    android:layout_weight="1"
+                                                    android:text="@{viewModel.isCurrentUTC() ? viewModel.convertEpochToSunrise(viewModel.weather.sys.sunrise) : viewModel.convertEpochToSunrise(viewModel.weather.sys.sunrise,viewModel.weather.timezone) }"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearance"
+                                                    android:textColor="@color/colorAccent" />
+
+                                                <TextView
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="match_parent"
+                                                    android:layout_weight="1"
+                                                    android:text="@{viewModel.isCurrentUTC() ? viewModel.convertEpochToSunrise(viewModel.weather.sys.sunset) :viewModel.convertEpochToSunrise(viewModel.weather.sys.sunset,viewModel.weather.timezone) }"
+                                                    android:textAlignment="center"
+                                                    android:textAppearance="?android:attr/textAppearance"
+                                                    android:textColor="@color/colorAccent" />
+
+                                            </LinearLayout>
+
+                                        </LinearLayout>
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+
+                <LinearLayout
+                    android:id="@+id/no_data_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.empty ? View.VISIBLE : View.GONE}">
+
+                    <ImageView
+                        android:id="@+id/no_data_icon"
+                        android:layout_width="@dimen/no_data_icon"
+                        android:layout_height="@dimen/no_data_icon"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/no_data_image_content_description"
+                        android:src="@{ContextCompat.getDrawable(context,viewModel.noDataIconRes)}" />
+
+                    <TextView
+                        android:id="@+id/no_data_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/list_item_padding"
+                        android:gravity="center"
+                        android:text="@{context.getString(viewModel.noDataLabel)}"
+                        android:textAlignment="center"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+                </LinearLayout>
+            </RelativeLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:backgroundTint="@color/colorAccent"
+            android:contentDescription="@string/get_current_coord"
+            android:elevation="@dimen/elevation"
+            android:src="@drawable/ic_location_48dp"
+            app:fabSize="normal"
+            app:layout_anchor="@+id/refresh_layout"
+            app:layout_anchorGravity="bottom|right|end" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -1,0 +1,14 @@
+package com.example.weatherapp.workmanager
+
+const val WEATHER_RESPONSE = "WEATHER_RESPONSE"
+const val SAVE_RESULT = "SAVE_RESULT"
+const val DAILY_RESULT = "DAILY_RESULT"
+const val DAILY_WORK_NAME = "DAILY_WORK_NAME"
+const val LOCATION_WORKER_KEY = "LOCATION_WORKER_KEY"
+const val ASYNC_API_WORKER_KEY = "ASYNC_API_WORKER_KEY"
+const val SAVING_WORKER_KEY = "SAVING_WORKER_KEY"
+const val LOCATION_LAT = "LOCATION_LAT"
+const val LOCATION_LONG = "LOCATION_LONG"
+const val LOCATION_TIME = "LOCATION_TIME"
+const val TAG_OUTPUT = "TAG_OUTPUT"
+const val DATABASE_NAME = "WeatherDB.db"

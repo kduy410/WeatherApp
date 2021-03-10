@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+
+    <color name="colorPrimary">#dbf6e9</color>
+    <color name="colorPrimaryDark">#9ddfd3</color>
+    <color name="colorAccent">#c70039</color>
+
+    <color name="colorTextPrimary">#16697a</color>
+    <color name="colorMenuBackgroundChecked">#fdcfdf</color>
+    <color name="colorTextHighLight">#ec5858</color>
+
+    <color name="colorPopupMenu">#eb596e</color>
+
+
+</resources>
